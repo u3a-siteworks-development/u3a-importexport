@@ -1,0 +1,65 @@
+/* CSS for use on import/export admin pages */
+
+.u3a-csv-downloads,
+.u3a-csv-uploads {
+    border: 1px solid grey;
+    background-color: white;
+    padding-left: 12px;
+}
+
+.u3a-csv-downloads span.flink a.button,
+.u3a-csv-uploads span.flink a.button {
+    width: 130px;
+    margin-right: 5px;
+}
+
+/* .u3a-csv-uploads input {
+    opacity: 0;
+    width: 20px;
+} */
+
+.u3a-csv-uploads label.button {
+    margin: 10px 0 0 0;
+    width: 130px;
+}
+
+.u3a-csv-uploads input[type="file"]::file-selector-button {
+    opacity: 0;
+    display: inline-block;
+    width: 5px;
+    margin: 10px 0 0 0;
+}
+
+.u3a-csv-uploads .button-primary {
+    margin: 20px 0 10px 0;
+}
+
+.u3a-csv-uploads input[type="reset"] {
+    margin: 20px 0 10px 10px;
+}
+
+div.u3a-csv-import {
+    text-align: center;
+    margin-top: 10px;
+}
+
+#spinnerdiv {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 999;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.4);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    visibility: hidden;
+    opacity: 0;
+}
+
+#spinnerdiv.show {
+    visibility: visible;
+    opacity: 1;
+}
