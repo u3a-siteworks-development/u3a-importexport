@@ -20,6 +20,8 @@ For more information please refer to the [SiteWorks website](https://siteworks.u
 Please refer to the documentation on the [SiteWorks website](https://siteworks.u3a.org.uk/u3a-siteworks-training/)
 
 == Changelog ==
+= 1.5.100 = 
+* Add warning after uploading CSV with ID fields present
 = 1.5.99 =
 * Bugs 928, 930 Fix issue importing Groups and Venues
 = 1.5.98 =

@@ -49,7 +49,7 @@ function u3a_show_importexport_menu()
     if (false !== $message) {
         delete_transient('u3a_csv_importexport_msg');
         // allow only para tags
-        $message = wp_kses($message, ['p'=> []]);
+        $message = wp_kses($message, ['p' => []]);
         // If more that 5 lines in message, put remainder into a hidden div
         // and provide link to show full message
         $msg_lines = substr_count($message, '<p>');
@@ -153,6 +153,18 @@ END;
             // Output Import tab content
 
         case 'import':
+            // Check transient to see if any import file contains an ID.  If so, show pop-up warning
+            $id_warning_script ='';
+            $CSV_has_ID = get_transient('CSV_has_ID');
+            if (false !== $CSV_has_ID) {
+                delete_transient('CSV_has_ID');
+                $id_warning_script = <<< END
+                <script>
+                alert("Warning\\n\\nAn ID field was detected in one of your import files.\\n\\nThe import process will overwrite existing records where there is a match of ID.\\n\\nThis may be what you want if you originally exported the data from this website, but importing data from another website will have unpredictable results and may corrupt your website. \\n\\nOnly proceed to import this file if you are sure you understand this.");
+                </script>
+                END;
+            }
+
             $upload_section    = u3a_get_upload_data();
             $import_section    = u3a_get_import_controls();
             $spinner_image     = plugins_url('css/spinner.gif', __FILE__);
@@ -163,6 +175,7 @@ END;
 
             print <<<END
         <h3>Upload files for import</h3>
+        $id_warning_script
 
         <div class="u3a-csv-uploads">
         <form action="admin-post.php" method="POST" enctype="multipart/form-data">
@@ -234,11 +247,11 @@ function u3a_upload_data()
     $upload_msg = '';
 
     foreach (array(
-                'ctdata'  => 'contacts',
-                'vendata' => 'venues',
-                'gpsdata' => 'groups',
-                'evtdata' => 'events',
-                ) as $file_id => $filename) {
+        'ctdata'  => 'contacts',
+        'vendata' => 'venues',
+        'gpsdata' => 'groups',
+        'evtdata' => 'events',
+    ) as $file_id => $filename) {
 
         if (!empty($_FILES[$file_id]['name'])) {
 
@@ -260,7 +273,7 @@ function u3a_upload_data()
     }
 
     // Save any messages and redirect back to import/export page
-        set_transient('u3a_csv_importexport_msg', $upload_msg, 60 * 5);
+    set_transient('u3a_csv_importexport_msg', $upload_msg, 60 * 5);
     wp_safe_redirect(admin_url('admin.php?page=u3a-importexport-menu&tab=import'));
 }
 

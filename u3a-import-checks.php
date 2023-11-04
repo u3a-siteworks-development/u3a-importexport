@@ -13,7 +13,7 @@ function u3a_check_csv_file($filename, $sourceFilename, $sourcefile)
 {
 
     // UTF-8 check  it is a pity we are reading the file twice
-	// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+    // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
     $csvcontents = file_get_contents($sourcefile);
     if (!mb_check_encoding($csvcontents, 'UTF-8')) {
         $encoding = mb_detect_encoding($csvcontents, array('ASCII', 'UTF-8', 'ISO-8859-1'), true); // returns encoding string or false
@@ -155,6 +155,11 @@ function u3a_check_groups_csv_file($sourcefile, $sourceFilename)
         if (in_array($col, $not_in_use)) {
             $validation_msg .= '<p> ' . $sourceFilename . " - Before trying to import a file with the '$col' column the option setting to show the corresponding field must be set.</p>";
         }
+    }
+
+    // Set transient flag if ID field is present
+    if (in_array('ID', $headers)) {
+        set_transient('CSV_has_ID', 'yes', 10 * MINUTE_IN_SECONDS);
     }
 
     // These columns are required: Name, Status, Category
@@ -315,6 +320,11 @@ function u3a_check_events_csv_file($sourcefile, $sourceFilename)
         }
     }
 
+    // Set transient flag if ID field is present
+    if (in_array('ID', $headers)) {
+        set_transient('CSV_has_ID', 'yes', 10 * MINUTE_IN_SECONDS);
+    }
+
     // These columns are required: Name, Category, Date.  Other columns are all optional.
     foreach (array('Name', 'Category', 'Date') as $title) {
         if (!in_array($title, $headers)) {
@@ -466,6 +476,11 @@ function u3a_check_contacts_csv_file($sourcefile, $sourceFilename)
         }
     }
 
+    // Set transient flag if ID field is present
+    if (in_array('ID', $headers)) {
+        set_transient('CSV_has_ID', 'yes', 10 * MINUTE_IN_SECONDS);
+    }
+
     // Check that the ID column only has integers or is empty
     if (in_array('ID', $headers)) {
         $column = array_column($contacts_csv, 'ID');
@@ -546,6 +561,11 @@ function u3a_check_venues_csv_file($sourcefile, $sourceFilename)
             $validation_msg .= '<p> ' . $sourceFilename . " - Before trying to import a file with the '$col' column the option setting to show the corresponding field must be set.</p>";
         }
     }
+
+    // Set transient flag if ID field is present
+    if (in_array('ID', $headers)) {
+        set_transient('CSV_has_ID', 'yes', 10 * MINUTE_IN_SECONDS);
+    }    
 
     // The 'Name' column is required.  Other columns are all optional.
     if (!in_array('Name', $headers)) {
