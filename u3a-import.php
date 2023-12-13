@@ -205,6 +205,12 @@ function u3a_csv_import_groups()
         if (isset($group['When'])) {
             update_post_meta($postid, 'when', sanitize_text_field($group['When']));
         }
+        if (isset($group['Start time'])) {
+            update_post_meta($postid, 'startTime', sanitize_text_field($group['Start time']));
+        }
+        if (isset($group['End time'])) {
+            update_post_meta($postid, 'endTime', sanitize_text_field($group['End time']));
+        }
         if (isset($group['Email'])) {
             update_post_meta($postid, 'email', sanitize_email($group['Email']));
         }

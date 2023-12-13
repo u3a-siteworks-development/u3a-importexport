@@ -110,6 +110,8 @@ function u3a_check_groups_csv_file($sourcefile, $sourceFilename)
         'Time',
         'Frequency',
         'When',
+        'Start time',
+        'End time',
         'Venue ID',
         'Venue',
         'Coordinator ID',
