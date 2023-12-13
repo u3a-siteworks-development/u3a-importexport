@@ -73,7 +73,7 @@ function u3a_csv_export_groups()
 
     // Create array of column headings in form data entry sequence
     $grouplist = array();
-    $heading   = array('ID', 'Name', 'Status', 'Category', 'Day', 'Time', 'Frequency', 'When', 'Venue ID', 'Venue', 'Coordinator ID', 'Coordinator');
+    $heading   = array('ID', 'Name', 'Status', 'Category', 'Day', 'Time', 'Frequency', 'When', 'Start time', 'End time', 'Venue ID', 'Venue', 'Coordinator ID', 'Coordinator');
     if ($inc_coord2) {
         $heading[] = 'Coordinator 2 ID';
         $heading[] = 'Coordinator 2';
@@ -133,6 +133,10 @@ function u3a_csv_export_groups()
         $row[] = get_post_meta($gp->ID, 'frequency', true);
         // When
         $row[] = html_entity_decode(get_post_meta($gp->ID, 'when', true));
+        // Start time
+        $row[] = html_entity_decode(get_post_meta($gp->ID, 'startTime', true));
+        //End time
+        $row[] = html_entity_decode(get_post_meta($gp->ID, 'endTime', true));
         // Venue ID and title
         list($id, $title) = id_and_title_of_metafield($gp, 'venue_ID');
         $row[]            = $id;
