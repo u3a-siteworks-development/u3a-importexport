@@ -261,7 +261,22 @@ function u3a_check_groups_csv_file($sourcefile, $sourceFilename)
             }
         }
     }
-
+    // Check Start time and End time columns for valid time format HH:MM (Time is optional entry so can be empty)
+    foreach (array('Start time', 'End time') as $col_heading) {
+        if (in_array($col_heading, $headers)) {
+            $column = array_column($groups_csv, $col_heading);
+            $row    = 1;
+            foreach ($column as $entry) {
+                ++$row;
+                if (!empty($entry)) {
+                    $checktime = date_create_from_format('H:i', $entry);
+                    if ($checktime === false || $checktime->format('H:i') !== $entry) {
+                        $validation_msg .= '<p> ' . $sourceFilename . " - Row $row - invalid Time '" . sanitize_text_field($entry) . "'</p>";
+                    }
+                }
+            }
+        }
+    }
     // Check that if a contact name is given that the name is present in the Contacts list (case insensitive)
     // TODO - Perhaps make this an optional check and allow auto-create non-existing contacts?
     $contacts = $wpdb->get_col(
