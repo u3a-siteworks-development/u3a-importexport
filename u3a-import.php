@@ -322,7 +322,8 @@ function u3a_csv_import_events($force_new_events = false)
         if (isset($event['Time'])) {
             update_post_meta($postid, 'eventTime', sanitize_text_field($event['Time']));
         }
-        if (isset($event['Days'])) {
+        // Only set eventDays if a 'Days' value is provided
+        if (isset($event['Days']) && $event['Days'] > 0) {
             update_post_meta($postid, 'eventDays', (int) $event['Days']);
         }
         // Set eventEndDate
