@@ -128,7 +128,7 @@ function u3a_csv_import_groups()
         1 => 'Active',
         2 => 'Full',
         3 => 'Wait list only',
-        4 => 'Suspended',
+        4 => 'Dormant',
         5 => 'Closed',
     );
 
