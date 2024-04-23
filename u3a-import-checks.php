@@ -198,7 +198,7 @@ function u3a_check_groups_csv_file($sourcefile, $sourceFilename)
                 'Active',
                 'Full',
                 'Wait list only',
-                'Suspended',
+                'Dormant',
                 'Closed',
             ),
             true

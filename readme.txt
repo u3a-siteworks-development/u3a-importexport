@@ -20,6 +20,7 @@ For more information please refer to the [SiteWorks website](https://siteworks.u
 Please refer to the documentation on the [SiteWorks website](https://siteworks.u3a.org.uk/u3a-siteworks-training/)
 
 == Changelog ==
+* Feature 1032 - Alter group status term "Suspended" to "Dormant"
 = 1.6.1 =
 * Bug 1033 - only set eventDays if a numeric value provided in event import file
 * Tested up to WordPress 6.5
