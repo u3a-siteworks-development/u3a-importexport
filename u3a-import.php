@@ -233,9 +233,13 @@ function u3a_csv_import_groups()
         // import-checks should mean we always have a valid value to set
         // Bug 605 must use slug (not name) to set the category
         if (isset($group['Category'])) {
-            $term = array_search($group['Category'], $group_categories);
-            if ($term) {
-                wp_set_object_terms($postid, $term, U3A_GROUP_TAXONOMY);
+            $categories = explode("|", $group['Category']);
+            $categories = str_replace("&#124;", "|", $categories);
+            foreach ($categories as $category) {
+                $term = array_search($category, $group_categories);
+                if ($term) {
+                    wp_set_object_terms($postid, $term, U3A_GROUP_TAXONOMY, true);
+                }
             }
         }
     }
@@ -322,6 +326,9 @@ function u3a_csv_import_events($force_new_events = false)
         if (isset($event['Time'])) {
             update_post_meta($postid, 'eventTime', sanitize_text_field($event['Time']));
         }
+        if (isset($event['End time'])) {
+            update_post_meta($postid, 'eventEndTime', sanitize_text_field($event['End time']));
+        }
         // Only set eventDays if a 'Days' value is provided
         if (isset($event['Days']) && $event['Days'] > 0) {
             update_post_meta($postid, 'eventDays', (int) $event['Days']);
@@ -380,7 +387,7 @@ function u3a_find_or_create_post($id, $title, $type, $force_new = false)
                     array('$id', '$type')
                 )
             );
-            if ($found === 0) {
+            if ($found == 0) {
                 $id = '';
             }
         }

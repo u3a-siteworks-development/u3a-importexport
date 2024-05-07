@@ -216,7 +216,7 @@ function u3a_check_groups_csv_file($sourcefile, $sourceFilename)
     foreach ($terms as $term) {
         $categories[] = $term->name;
     }
-    $validation_msg .= u3a_check_csv_column($sourceFilename, $groups_csv, 'Category', $categories, true);
+    $validation_msg .= u3a_check_csv_column_array($sourceFilename, $groups_csv, 'Category', $categories, true);
 
     // Check Day column for valid entries if present.  Empty entries allowed.
 
@@ -330,7 +330,7 @@ function u3a_check_events_csv_file($sourcefile, $sourceFilename)
     }
 
     // check each header field is valid
-    $valid_cols = array('ID', 'Name', 'Category', 'Date', 'Time', 'Days', 'Group ID', 'Group', 'Venue ID', 'Venue', 'Organiser ID', 'Organiser', 'Cost', 'Booking');
+    $valid_cols = array('ID', 'Name', 'Category', 'Date', 'Time', 'End time', 'Days', 'Group ID', 'Group', 'Venue ID', 'Venue', 'Organiser ID', 'Organiser', 'Cost', 'Booking');
     foreach ($headers as $col) {
         if (!in_array($col, $valid_cols)) {
             $validation_msg .= '<p> ' . $sourceFilename . " - The column heading '" . sanitize_text_field($col) . "' is not valid</p>";
@@ -399,7 +399,22 @@ function u3a_check_events_csv_file($sourcefile, $sourceFilename)
             ++$row;
             if (!empty($entry)) {
                 $checktime = date_create_from_format('H:i', $entry);
-                if ($checktime === false || $checktime->format('H:i') !== $entry) {
+                if ($checktime === false || ($checktime->format('H:i') !== $entry) && ($checktime->format('G:i') !== $entry)) {
+                    $validation_msg .= '<p> ' . $sourceFilename . " - Row $row - invalid Time '" . sanitize_text_field($entry) . "'</p>";
+                }
+            }
+        }
+    }
+
+    // Check End time column for valid time format HH:MM (End time is optional entry so can be empty)
+    if (in_array('End time', $headers)) {
+        $column = array_column($events_csv, 'End time');
+        $row    = 1;
+        foreach ($column as $entry) {
+            ++$row;
+            if (!empty($entry)) {
+                $checktime = date_create_from_format('H:i', $entry);
+                if ($checktime === false || ($checktime->format('H:i') !== $entry) && ($checktime->format('G:i') !== $entry)) {
                     $validation_msg .= '<p> ' . $sourceFilename . " - Row $row - invalid Time '" . sanitize_text_field($entry) . "'</p>";
                 }
             }
@@ -657,6 +672,46 @@ function u3a_check_csv_column($sourceFilename, &$csvdata, $heading, $valid_entri
         $test_value = ($sanitize) ? sanitize_title($entry) : $entry;
         if (!empty($entry) && !in_array($test_value, $valid_entries)) {
             $html .= '<p> ' . $sourceFilename . " - Row $row '" . sanitize_text_field($entry) . "' is not a valid $heading</p>";
+        } elseif (empty($entry) && $required) {
+            $html .= '<p> ' . $sourceFilename . " - Row $row missing required entry for $heading</p>";
+        }
+    }
+    return $html;
+}
+
+/**
+ * Check that the specified column only contains valid text strings
+ * from the array of valid strings provided. This version expects that the column may contain
+ * a split-bar separated list of values.
+ *
+ * @param string $sourceFilename is the basename of the uploaded file, eg mygroups.csv
+ * @param array $csvdata the CSV keyed array
+ * @param string $heading the column heading
+ * @param array $valid_entries string array of valid column entries
+ * @param boolean $required if true consider empty cells as an error
+ * @param boolean $sanitize if true do comparison on sanitized values
+ * @return string empty string if no errors found, or HTML text of all detected errors in p tags
+ */
+function u3a_check_csv_column_array($sourceFilename, &$csvdata, $heading, $valid_entries, $required = false, $sanitize = false)
+{
+    $html = '';
+    if ($sanitize) {
+        $valid_entries = array_map('sanitize_title', $valid_entries);
+    }
+    $column = array_column($csvdata, $heading);
+    $row    = 1;
+    foreach ($column as $entry) {
+        ++$row;
+        $test_value = ($sanitize) ? sanitize_title($entry) : $entry;
+        if (!empty($entry)) {
+            $entry_values = explode("|", $test_value);
+            $entry_values = str_replace("&#124;", "|", $entry_values);
+            foreach ($entry_values as $entry_value) {
+                if (!in_array($entry_value, $valid_entries)) {
+                    $html .= '<p> ' . $sourceFilename . " - Row $row '" . sanitize_text_field($entry) . "' contains an invalid $heading</p>";
+                    break;
+                }
+            }
         } elseif (empty($entry) && $required) {
             $html .= '<p> ' . $sourceFilename . " - Row $row missing required entry for $heading</p>";
         }
