@@ -120,7 +120,9 @@ function u3a_csv_export_groups()
         // Category
         $terms = get_the_terms($gp->ID, U3A_GROUP_TAXONOMY);
         if ((false !== $terms) && !is_wp_error($terms)) {
-            $row[] = $terms[0]->name;
+            $names = wp_list_pluck($terms, "name");
+            $names = str_replace("|", "&#124;", $names);
+            $row[] = implode("|", $names);
         } else {
             // Shouldn't happen, but output an empty value
             $row[] = '';
@@ -249,7 +251,7 @@ function u3a_csv_export_events()
 {
     //create array to contain data with headings to match post meta data
     $eventlist   = array();
-    $heading     = array('ID', 'Name', 'Category', 'Date', 'Time', 'Days', 'Group ID', 'Group', 'Venue ID', 'Venue', 'Organiser ID', 'Organiser', 'Cost', 'Booking');
+    $heading     = array('ID', 'Name', 'Category', 'Date', 'Time', 'End time', 'Days', 'Group ID', 'Group', 'Venue ID', 'Venue', 'Organiser ID', 'Organiser', 'Cost', 'Booking');
     $eventlist[] = $heading;
 
     //get all the posts of type 'u3a_event' as array $results
@@ -275,6 +277,7 @@ function u3a_csv_export_events()
         // Note: get_post_meta returns empty string if value not set.
         $date                = get_post_meta($evt->ID, 'eventDate', true);
         $time                = get_post_meta($evt->ID, 'eventTime', true);
+        $endtime             = get_post_meta($evt->ID, 'eventEndTime', true);
         $days                = get_post_meta($evt->ID, 'eventDays', true);
         list($grpid, $group) = id_and_title_of_metafield($evt, 'eventGroup_ID');
         list($venid, $venue) = id_and_title_of_metafield($evt, 'eventVenue_ID');
@@ -282,7 +285,7 @@ function u3a_csv_export_events()
         $cost                = get_post_meta($evt->ID, 'eventCost', true);
         $booking             = get_post_meta($evt->ID, 'eventBookingRequired', true) === 1 ? 'Yes' : 'No';
 
-        $event = array($id, $name, $cat, $date, $time, $days, $grpid, $group, $venid, $venue, $orgid, $org, $cost, $booking);
+        $event = array($id, $name, $cat, $date, $time, $endtime, $days, $grpid, $group, $venid, $venue, $orgid, $org, $cost, $booking);
 
         $eventlist[] = $event;
     }
