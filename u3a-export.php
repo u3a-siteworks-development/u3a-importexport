@@ -120,7 +120,7 @@ function u3a_csv_export_groups()
         // Category
         $terms = get_the_terms($gp->ID, U3A_GROUP_TAXONOMY);
         if ((false !== $terms) && !is_wp_error($terms)) {
-            $names = wp_list_pluck($terms, "name");
+            $names = array_map('trim', wp_list_pluck($terms, "name"));
             $names = str_replace("|", "&#124;", $names);
             $row[] = implode("|", $names);
         } else {

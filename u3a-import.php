@@ -235,6 +235,7 @@ function u3a_csv_import_groups()
         if (isset($group['Category'])) {
             $categories = explode("|", $group['Category']);
             $categories = str_replace("&#124;", "|", $categories);
+            $categories = array_map('trim', $categories);
             foreach ($categories as $category) {
                 $term = array_search($category, $group_categories);
                 if ($term) {

@@ -706,6 +706,7 @@ function u3a_check_csv_column_array($sourceFilename, &$csvdata, $heading, $valid
         if (!empty($entry)) {
             $entry_values = explode("|", $test_value);
             $entry_values = str_replace("&#124;", "|", $entry_values);
+            $entry_values = array_map('trim', $entry_values);
             foreach ($entry_values as $entry_value) {
                 if (!in_array($entry_value, $valid_entries)) {
                     $html .= '<p> ' . $sourceFilename . " - Row $row '" . sanitize_text_field($entry) . "' contains an invalid $heading</p>";
