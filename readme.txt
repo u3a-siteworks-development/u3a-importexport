@@ -1,6 +1,6 @@
 === u3a-importexport ===
 Requires at least: 5.9
-Tested up to: 6.5
+Tested up to: 6.7
 Stable tag: 5.9
 Requires PHP: 7.3
 License: GPLv2 or later
@@ -20,6 +20,10 @@ For more information please refer to the [SiteWorks website](https://siteworks.u
 Please refer to the documentation on the [SiteWorks website](https://siteworks.u3a.org.uk/u3a-siteworks-training/)
 
 == Changelog ==
+= 1.6.3 =
+* Bug 1104 Fix fatal error if plugin.php is not loaded when plugin initialises.
+* Tested up to WordPress 6.7
+* Add "Requires Plugins" header field to specify dependency on SiteWorks core plugin
 = 1.6.2 =
 * Import and export now handle core v1.1.0 metadata fields and multiple group categories
 * Feature 1032 - Alter group status short term from "Suspended" to "Dormant"
