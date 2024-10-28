@@ -2,23 +2,27 @@
 /** 
 Plugin Name: u3a SiteWorks Import Export
 Description: Provides facility to import and export CSV data files
-Version: 1.6.2
+Version: 1.6.3
 Author: u3a SiteWorks team
 Author URI: https://siteworks.u3a.org.uk/
 Plugin URI: https://siteworks.u3a.org.uk/
 License: GPLv2
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
+Requires Plugins: u3a-siteworks-core
+
 */
 
 if (!defined('ABSPATH')) {
     exit;
 }
 
-define('U3A_IMPORTEXPORT_VERSION', '1.6.2');
+define('U3A_IMPORTEXPORT_VERSION', '1.6.3');
 
 if (!is_admin()) return; // Plugin only relevant on admin pages.
 
 // Check SiteWorks core plugin is active (needed for some definitions)
+// Check retained for WordPress installations before 6.5 that do not support "Requires Plugins"
+require_once(ABSPATH.'wp-admin/includes/plugin.php');
 if (!is_plugin_active('u3a-siteworks-core/u3a-siteworks-core.php')) {
     return;
 }
