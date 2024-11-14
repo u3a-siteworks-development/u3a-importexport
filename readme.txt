@@ -21,6 +21,7 @@ Please refer to the documentation on the [SiteWorks website](https://siteworks.u
 
 == Changelog ==
 = 1.6.3 =
+* Feature 1094 Change short text form of group status to "Waiting list"
 * Bug 1104 Fix fatal error if plugin.php is not loaded when plugin initialises.
 * Tested up to WordPress 6.7
 * Add "Requires Plugins" header field to specify dependency on SiteWorks core plugin

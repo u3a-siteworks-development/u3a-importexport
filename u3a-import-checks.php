@@ -197,7 +197,7 @@ function u3a_check_groups_csv_file($sourcefile, $sourceFilename)
                 'No longer meeting',
                 'Active',
                 'Full',
-                'Wait list only',
+                'Waiting list',
                 'Dormant',
                 'Closed',
             ),
