@@ -1,4 +1,4 @@
-<?php
+<?php // phpcs:ignore PSR1.Files.SideEffects.FoundWithSymbols
 
 // Make sure we have the required folders
 
@@ -16,7 +16,12 @@ add_action(
 add_action(
     'admin_enqueue_scripts',
     function () {
-        wp_enqueue_style('u3aimportexportstyle', plugins_url('css/u3a-importexport.css', __FILE__), array(), U3A_IMPORTEXPORT_VERSION);
+        wp_enqueue_style(
+            'u3aimportexportstyle',
+            plugins_url('css/u3a-importexport.css', __FILE__),
+            array(),
+            U3A_IMPORTEXPORT_VERSION
+        );
     }
 );
 
@@ -63,7 +68,8 @@ function u3a_show_importexport_menu()
             $message  = substr($message, 0, $ppos); // first 5 lines
             $morelines   = $msg_lines - 5;
             $message .= <<< END
-            <div id="showmsghead"><p>$morelines more lines available.  <a href="#" onclick="showrestofmsg()">View full message</a>.</p></div>
+            <div id="showmsghead"><p>$morelines more lines available.
+              <a href="#" onclick="showrestofmsg()">View full message</a>.</p></div>
             <div id="showrestofmsg" style="display:none;">$rest_of_msg</div>
             <script>
                 function showrestofmsg() {
@@ -132,19 +138,28 @@ END;
             print <<< END
     <div  style="max-width:800px;">
     <h3>Exporting information</h3>
-    <p>To create an up to date set of export files, select the Export tab and click the button 'Generate new export files'.
+    <p>To create an up to date set of export files, select the Export tab and click the button 
+    'Generate new export files'.
     You can then download whichever set of data your require.</p>
     <h3>Importing information</h3>
-    <p><strong>It is highly recommended that you create a backup of your website before importing from your CSV files.</strong></p>
-    <p>If you will be creating your CSV import files using a spreadsheet application you may find it helpful to download a copy
-    of the spreadsheet import template (available on the 'Export' tab).  This contains ready-made sheets you can use.  It also contains
+    <p><strong>It is highly recommended that you create a backup of your website 
+    before importing from your CSV files.</strong></p>
+    <p>If you will be creating your CSV import files using a spreadsheet 
+    application you may find it helpful to download a copy
+    of the spreadsheet import template (available on the 'Export' tab).  
+    This contains ready-made sheets you can use.  It also contains
     a reminder of the main requirements for what information is required in import files.</p>
     <p>Importing information is a two-stage process.</p>
-    <p style="margin-left: 30px;">When you select and upload a file, it will be checked to ensure all the required information
-    is present and that individual items of data appear valid.  Any problems detected will be shown, and the file will not be accepted for the next stage.</p>
-    <p style="margin-left: 30px;">Once a file has passed all the checks it will be shown as ready for import.  You can then proceed to import the
-    file by clicking the button 'Import files into WordPress'.  Depending on how much data you have uploaded this may take some time.</p>
-    <p>We recommend that if you have several files to import that you do them in the order Contacts, Venues, Groups then Events.  It is a good idea to
+    <p style="margin-left: 30px;">When you select and upload a file, it will be 
+    checked to ensure all the required information
+    is present and that individual items of data appear valid.  
+    Any problems detected will be shown, and the file will not be accepted for the next stage.</p>
+    <p style="margin-left: 30px;">Once a file has passed all the checks it will 
+    be shown as ready for import.  You can then proceed to import the
+    file by clicking the button 'Import files into WordPress'.  Depending on how 
+    much data you have uploaded this may take some time.</p>
+    <p>We recommend that if you have several files to import that you do them 
+    in the order Contacts, Venues, Groups then Events.  It is a good idea to
     check that each individual file has been imported successfully before continuing to import the next file.</p>
     </div>
 END;
@@ -154,13 +169,18 @@ END;
 
         case 'import':
             // Check transient to see if any import file contains an ID.  If so, show pop-up warning
-            $id_warning_script ='';
+            $id_warning_script = '';
             $CSV_has_ID = get_transient('CSV_has_ID');
             if (false !== $CSV_has_ID) {
                 delete_transient('CSV_has_ID');
                 $id_warning_script = <<< END
                 <script>
-                alert("Warning\\n\\nAn ID field was detected in one of your import files.\\n\\nThe import process will overwrite existing records where there is a match of ID.\\n\\nThis may be what you want if you originally exported the data from this website, but importing data from another website will have unpredictable results and may corrupt your website. \\n\\nOnly proceed to import this file if you are sure you understand this.");
+                alert("Warning\\n\\nAn ID field was detected in one of your import 
+                files.\\n\\nThe import process will overwrite existing records where 
+                there is a match of ID.\\n\\nThis may be what you want if you 
+                originally exported the data from this website, but importing 
+                data from another website will have unpredictable results and may 
+                corrupt your website. \\n\\nOnly proceed to import this file if you are sure you understand this.");
                 </script>
                 END;
             }
@@ -204,7 +224,13 @@ END;
 
         default:
             $download_section  = u3a_get_download_data();
-            $refresh_downloads = get_submit_button('Generate new export files', 'primary large', 'regen', false, array('style' => 'margin-top:10px;'));
+            $refresh_downloads = get_submit_button(
+                'Generate new export files',
+                'primary large',
+                'regen',
+                false,
+                array('style' => 'margin-top:10px;')
+            );
             // phpcs:disable WordPress.Security.EscapeOutput.HeredocOutputNotEscaped
             // Justification download_section and nonce_code are generated from reliable data.
             print <<<END
@@ -217,7 +243,6 @@ END;
     </form>
 END;
             // phpcs:enable WordPress.Security.EscapeOutput.HeredocOutputNotEscaped
-
     }
     print <<<END
 </div><!-- wrap -->
@@ -246,15 +271,15 @@ function u3a_upload_data()
 
     $upload_msg = '';
 
-    foreach (array(
+    foreach (
+        array(
         'ctdata'  => 'contacts',
         'vendata' => 'venues',
         'gpsdata' => 'groups',
         'evtdata' => 'events',
-    ) as $file_id => $filename) {
-
+        ) as $file_id => $filename
+    ) {
         if (!empty($_FILES[$file_id]['name'])) {
-
             $destfilename   = "$filename.csv";
             $sourceFilename = $_FILES[$file_id]['name'];
 
@@ -306,7 +331,6 @@ function u3a_csv_import_data()
     $import_message = '';
 
     if (isset($_POST['import'])) {
-
         // look for files to import
         if (file_exists(U3A_IMPORT_FOLDER . '/contacts.csv')) {
             $import_message .= u3a_csv_import_contacts();
@@ -369,7 +393,8 @@ function u3a_get_import_controls()
     <input type="checkbox" id="removeafterimport" name="removeafterimport" value="1" checked></p>
     <input type="submit" class="button button-primary button-large" value="Import files into WordPress" name="import"
     onClick="return startImportCheck()">
-    <input type="submit" class="button button-secondary button-large" value="Clear existing uploaded files" name="clearuploads"
+    <input type="submit" class="button button-secondary button-large" value="Clear existing uploaded files" 
+    name="clearuploads"
     onClick="return confirm('Delete files that are currently uploaded?');">
 <script>
 function startImportCheck() {
@@ -394,11 +419,15 @@ END;
  * Get list of uploaded files with current dates
  * plus form to upload replacements
  *
- * @return void
+ * @return string
  */
 function u3a_get_upload_data()
 {
 
+    $contacts = '';
+    $venues = '';
+    $groups = '';
+    $events = '';
     foreach (array('contacts', 'venues', 'groups', 'events') as $file) {
         $source = U3A_IMPORT_FOLDER . "/$file.csv";
         if (file_exists($source)) {
@@ -471,10 +500,12 @@ function u3a_get_download_data()
             $UTCtime->setTimezone(new DateTimeZone('Europe/London'));
             $ftime = $UTCtime->format('H:ia F jS');
             $url   = $u3a_csv_export_link . $download;
-            $html .= "<p><span class=\"flink\"><a href=\"$url\" class=\"button\">Download $download</a></span> <span class=\"ftime\"> Generated $ftime</span></p>\n";
+            $html .= "<p><span class=\"flink\"><a href=\"$url\" class=\"button\">Download $download</a>
+            </span> <span class=\"ftime\"> Generated $ftime</span></p>\n";
         }
     }
-    $html .= '<p><a href="' . $u3a_csv_export_link . "template\" class=\"button\">Download spreadsheet import template</a></p>\n";
+    $html .= '<p><a href="' . $u3a_csv_export_link .
+     "template\" class=\"button\">Download spreadsheet import template</a></p>\n";
     $html .= "</div><!-- u3a-csv-downloads -->\n";
     return $html;
 }

@@ -1,4 +1,5 @@
-<?php
+<?php // phpcs:ignore Generic.Files.LineEndings.InvalidEOLChar
+
 if (!defined('ABSPATH')) {
     exit;
 }

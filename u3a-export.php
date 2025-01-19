@@ -1,5 +1,7 @@
-<?php
-/*This file contains the functions that export the data from the contacts, venues, groups and events custom post types.*/
+<?php // phpcs:ignore Generic.Files.LineEndings.InvalidEOLChar
+
+/*This file contains the functions that export the data from the contacts,
+venues, groups and events custom post types.*/
 
 function u3a_csv_export_contacts()
 {
@@ -73,7 +75,8 @@ function u3a_csv_export_groups()
 
     // Create array of column headings in form data entry sequence
     $grouplist = array();
-    $heading   = array('ID', 'Name', 'Status', 'Category', 'Day', 'Time', 'Frequency', 'When', 'Start time', 'End time', 'Venue ID', 'Venue', 'Coordinator ID', 'Coordinator');
+    $heading   = array('ID', 'Name', 'Status', 'Category', 'Day', 'Time',
+     'Frequency', 'When', 'Start time', 'End time', 'Venue ID', 'Venue', 'Coordinator ID', 'Coordinator');
     if ($inc_coord2) {
         $heading[] = 'Coordinator 2 ID';
         $heading[] = 'Coordinator 2';
@@ -200,7 +203,8 @@ function u3a_csv_export_venues()
     $include_district = (get_option('field_v_district', 1) == 1) ? true : false;
 
     $venuelist = array();
-    $heading   = array('ID', 'Name', 'District', 'Address Line 1', 'Address Line 2', 'Town', 'Postcode', 'Accessibility', 'Phone', 'URL');
+    $heading   = array('ID', 'Name', 'District', 'Address Line 1', 'Address Line 2',
+     'Town', 'Postcode', 'Accessibility', 'Phone', 'URL');
     if (!$include_district) {
         unset($heading[2]);
     }
@@ -251,7 +255,8 @@ function u3a_csv_export_events()
 {
     //create array to contain data with headings to match post meta data
     $eventlist   = array();
-    $heading     = array('ID', 'Name', 'Category', 'Date', 'Time', 'End time', 'Days', 'Group ID', 'Group', 'Venue ID', 'Venue', 'Organiser ID', 'Organiser', 'Cost', 'Booking');
+    $heading     = array('ID', 'Name', 'Category', 'Date', 'Time', 'End time',
+     'Days', 'Group ID', 'Group', 'Venue ID', 'Venue', 'Organiser ID', 'Organiser', 'Cost', 'Booking');
     $eventlist[] = $heading;
 
     //get all the posts of type 'u3a_event' as array $results
@@ -285,7 +290,8 @@ function u3a_csv_export_events()
         $cost                = get_post_meta($evt->ID, 'eventCost', true);
         $booking             = get_post_meta($evt->ID, 'eventBookingRequired', true) === 1 ? 'Yes' : 'No';
 
-        $event = array($id, $name, $cat, $date, $time, $endtime, $days, $grpid, $group, $venid, $venue, $orgid, $org, $cost, $booking);
+        $event = array($id, $name, $cat, $date, $time, $endtime, $days,
+         $grpid, $group, $venid, $venue, $orgid, $org, $cost, $booking);
 
         $eventlist[] = $event;
     }
@@ -305,8 +311,8 @@ function u3a_csv_export_events()
 /**
  * Get the id and title related to some metafield of a post.
  *
- * @param post object $post
- * @param str $metafield the name of the meta field containing some post's id
+ * @param object post object $post
+ * @param string $metafield the name of the meta field containing some post's id
  *
  * @return array [id, plain text of title]
  */

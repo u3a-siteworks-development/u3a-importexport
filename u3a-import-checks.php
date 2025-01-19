@@ -16,9 +16,11 @@ function u3a_check_csv_file($filename, $sourceFilename, $sourcefile)
     // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
     $csvcontents = file_get_contents($sourcefile);
     if (!mb_check_encoding($csvcontents, 'UTF-8')) {
-        $encoding = mb_detect_encoding($csvcontents, array('ASCII', 'UTF-8', 'ISO-8859-1'), true); // returns encoding string or false
+        // returns encoding string or false
+        $encoding = mb_detect_encoding($csvcontents, array('ASCII', 'UTF-8', 'ISO-8859-1'), true);
         if (empty($encoding)) {
-            return '<p>Your file ' . $sourceFilename . ' contains invalid characters and is possibly not Unicode (UTF-8) encoded</p>';
+            return '<p>Your file ' . $sourceFilename .
+             ' contains invalid characters and is possibly not Unicode (UTF-8) encoded</p>';
         } else {
             return '<p>Your file ' . $sourceFilename . " uses $encoding encoding.  Files need to be UTF-8 encoded.</p>";
         }
@@ -152,10 +154,13 @@ function u3a_check_groups_csv_file($sourcefile, $sourceFilename)
     }
     foreach ($headers as $col) {
         if (!in_array($col, $valid_cols)) {
-            $validation_msg .= '<p> ' . $sourceFilename . " - The column heading '" . sanitize_text_field($col) . "' is not valid</p>";
+            $validation_msg .= '<p> ' . $sourceFilename . " - The column heading '" .
+             sanitize_text_field($col) . "' is not valid</p>";
         }
         if (in_array($col, $not_in_use)) {
-            $validation_msg .= '<p> ' . $sourceFilename . " - Before trying to import a file with the '$col' column the option setting to show the corresponding field must be set.</p>";
+            $validation_msg .= '<p> ' . $sourceFilename .
+             " - Before trying to import a file with the '$col' column the option setting to show the 
+             corresponding field must be set.</p>";
         }
     }
 
@@ -221,17 +226,32 @@ function u3a_check_groups_csv_file($sourcefile, $sourceFilename)
     // Check Day column for valid entries if present.  Empty entries allowed.
 
     if (in_array('Day', $headers)) {
-        $validation_msg .= u3a_check_csv_column($sourceFilename, $groups_csv, 'Day', array('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'));
+        $validation_msg .= u3a_check_csv_column(
+            $sourceFilename,
+            $groups_csv,
+            'Day',
+            array('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday')
+        );
     }
 
     // Check Time column for valid entries if present.  Empty entries allowed.
     if (in_array('Time', $headers)) {
-        $validation_msg .= u3a_check_csv_column($sourceFilename, $groups_csv, 'Time', array('Morning', 'Afternoon', 'Evening', 'All Day'));
+        $validation_msg .= u3a_check_csv_column(
+            $sourceFilename,
+            $groups_csv,
+            'Time',
+            array('Morning', 'Afternoon', 'Evening', 'All Day')
+        );
     }
 
     // Check Frequency column for valid entries if present.  Empty entries allowed.
     if (in_array('Frequency', $headers)) {
-        $validation_msg .= u3a_check_csv_column($sourceFilename, $groups_csv, 'Frequency', array('Weekly', 'Fortnightly', 'Monthly'));
+        $validation_msg .= u3a_check_csv_column(
+            $sourceFilename,
+            $groups_csv,
+            'Frequency',
+            array('Weekly', 'Fortnightly', 'Monthly')
+        );
     }
 
     // Check that an ID column only has integers or is empty
@@ -242,7 +262,8 @@ function u3a_check_groups_csv_file($sourcefile, $sourceFilename)
             foreach ($column as $entry) {
                 ++$row;
                 if (!empty($entry) && !is_numeric($entry)) {
-                    $validation_msg .= '<p> ' . $sourceFilename . " - Row $row '" . sanitize_text_field($entry) . "' is not a valid ID in column $col_heading</p>";
+                    $validation_msg .= '<p> ' . $sourceFilename . " - Row $row '" . sanitize_text_field($entry) .
+                     "' is not a valid ID in column $col_heading</p>";
                 }
             }
         }
@@ -256,7 +277,8 @@ function u3a_check_groups_csv_file($sourcefile, $sourceFilename)
             foreach ($column as $entry) {
                 ++$row;
                 if (!empty($entry) && !filter_var($entry, FILTER_VALIDATE_EMAIL)) {
-                    $validation_msg .= '<p> ' . $sourceFilename . " - Row $row '" . sanitize_text_field($entry) . "' is not a valid email address in column $col_heading</p>";
+                    $validation_msg .= '<p> ' . $sourceFilename . " - Row $row '" . sanitize_text_field($entry) .
+                     "' is not a valid email address in column $col_heading</p>";
                 }
             }
         }
@@ -271,7 +293,8 @@ function u3a_check_groups_csv_file($sourcefile, $sourceFilename)
                 if (!empty($entry)) {
                     $checktime = date_create_from_format('H:i', $entry);
                     if ($checktime === false || $checktime->format('H:i') !== $entry) {
-                        $validation_msg .= '<p> ' . $sourceFilename . " - Row $row - invalid Time '" . sanitize_text_field($entry) . "'</p>";
+                        $validation_msg .= '<p> ' . $sourceFilename . " - Row $row - invalid Time '" .
+                         sanitize_text_field($entry) . "'</p>";
                     }
                 }
             }
@@ -303,7 +326,8 @@ function u3a_check_groups_csv_file($sourcefile, $sourceFilename)
             array(U3A_VENUE_CPT, 'publish')
         )
     );
-    //$venues = $wpdb->get_col("SELECT post_title FROM $wpdb->posts WHERE post_type = '" . U3A_VENUE_CPT . "' AND post_status = 'publish'");
+    //$venues = $wpdb->get_col("SELECT post_title FROM $wpdb->posts WHERE post_type = '" .
+    // U3A_VENUE_CPT . "' AND post_status = 'publish'");
     // use sanitize_title'd values in comparison
     $validation_msg .= u3a_check_csv_column($sourceFilename, $groups_csv, 'Venue', $venues, false, true);
 
@@ -330,10 +354,12 @@ function u3a_check_events_csv_file($sourcefile, $sourceFilename)
     }
 
     // check each header field is valid
-    $valid_cols = array('ID', 'Name', 'Category', 'Date', 'Time', 'End time', 'Days', 'Group ID', 'Group', 'Venue ID', 'Venue', 'Organiser ID', 'Organiser', 'Cost', 'Booking');
+    $valid_cols = array('ID', 'Name', 'Category', 'Date', 'Time', 'End time', 'Days', 'Group ID',
+     'Group', 'Venue ID', 'Venue', 'Organiser ID', 'Organiser', 'Cost', 'Booking');
     foreach ($headers as $col) {
         if (!in_array($col, $valid_cols)) {
-            $validation_msg .= '<p> ' . $sourceFilename . " - The column heading '" . sanitize_text_field($col) . "' is not valid</p>";
+            $validation_msg .= '<p> ' . $sourceFilename . " - The column heading '" .
+             sanitize_text_field($col) . "' is not valid</p>";
         }
     }
 
@@ -386,7 +412,8 @@ function u3a_check_events_csv_file($sourcefile, $sourceFilename)
             }
             $checkdate = date_create_from_format('Y-m-d', $entry);
             if ($checkdate === false || $checkdate->format('Y-m-d') !== $entry) {
-                $validation_msg .= '<p> ' . $sourceFilename . " - Row $row - invalid Date '" . sanitize_text_field($entry) . "'</p>";
+                $validation_msg .= '<p> ' . $sourceFilename . " - Row $row - invalid Date '" .
+                 sanitize_text_field($entry) . "'</p>";
             }
         }
     }
@@ -399,8 +426,12 @@ function u3a_check_events_csv_file($sourcefile, $sourceFilename)
             ++$row;
             if (!empty($entry)) {
                 $checktime = date_create_from_format('H:i', $entry);
-                if ($checktime === false || ($checktime->format('H:i') !== $entry) && ($checktime->format('G:i') !== $entry)) {
-                    $validation_msg .= '<p> ' . $sourceFilename . " - Row $row - invalid Time '" . sanitize_text_field($entry) . "'</p>";
+                if (
+                    $checktime === false || ($checktime->format('H:i') !== $entry) &&
+                    ($checktime->format('G:i') !== $entry)
+                ) {
+                    $validation_msg .= '<p> ' . $sourceFilename . " - Row $row - invalid Time '" .
+                     sanitize_text_field($entry) . "'</p>";
                 }
             }
         }
@@ -414,8 +445,12 @@ function u3a_check_events_csv_file($sourcefile, $sourceFilename)
             ++$row;
             if (!empty($entry)) {
                 $checktime = date_create_from_format('H:i', $entry);
-                if ($checktime === false || ($checktime->format('H:i') !== $entry) && ($checktime->format('G:i') !== $entry)) {
-                    $validation_msg .= '<p> ' . $sourceFilename . " - Row $row - invalid Time '" . sanitize_text_field($entry) . "'</p>";
+                if (
+                    $checktime === false || ($checktime->format('H:i') !== $entry) &&
+                    ($checktime->format('G:i') !== $entry)
+                ) {
+                    $validation_msg .= '<p> ' . $sourceFilename . " - Row $row - invalid Time '" .
+                     sanitize_text_field($entry) . "'</p>";
                 }
             }
         }
@@ -429,7 +464,8 @@ function u3a_check_events_csv_file($sourcefile, $sourceFilename)
             foreach ($column as $entry) {
                 ++$row;
                 if (!empty($entry) && !is_numeric($entry)) {
-                    $validation_msg .= '<p> ' . $sourceFilename . " - Row $row '" . sanitize_text_field($entry) . "' is not a valid $col_heading</p>";
+                    $validation_msg .= '<p> ' . $sourceFilename . " - Row $row '" . sanitize_text_field($entry) .
+                     "' is not a valid $col_heading</p>";
                 }
             }
         }
@@ -443,7 +479,8 @@ function u3a_check_events_csv_file($sourcefile, $sourceFilename)
                 array(U3A_GROUP_CPT, 'publish')
             )
         );
-        //$groups = $wpdb->get_col("SELECT post_title FROM $wpdb->posts WHERE post_type = '" . U3A_GROUP_CPT . "' AND post_status = 'publish'");
+        //$groups = $wpdb->get_col("SELECT post_title FROM $wpdb->posts WHERE post_type = '" .
+        // U3A_GROUP_CPT . "' AND post_status = 'publish'");
         // use sanitize_title'd values in comparison
         $validation_msg .= u3a_check_csv_column($sourceFilename, $events_csv, 'Group', $groups, false, true);
     }
@@ -457,7 +494,8 @@ function u3a_check_events_csv_file($sourcefile, $sourceFilename)
                 array(U3A_VENUE_CPT, 'publish')
             )
         );
-        //$venues = $wpdb->get_col("SELECT post_title FROM $wpdb->posts WHERE post_type = '" . U3A_VENUE_CPT . "' AND post_status = 'publish'");
+        //$venues = $wpdb->get_col("SELECT post_title FROM $wpdb->posts
+        //WHERE post_type = '" . U3A_VENUE_CPT . "' AND post_status = 'publish'");
         // use sanitize_title'd values in comparison
         $validation_msg .= u3a_check_csv_column($sourceFilename, $events_csv, 'Venue', $venues, false, true);
     }
@@ -470,7 +508,8 @@ function u3a_check_events_csv_file($sourcefile, $sourceFilename)
                 array(U3A_CONTACT_CPT, 'publish')
             )
         );
-        //$contacts = $wpdb->get_col("SELECT post_title FROM $wpdb->posts WHERE post_type = '" . U3A_CONTACT_CPT . "' AND post_status = 'publish'");
+        //$contacts = $wpdb->get_col("SELECT post_title FROM $wpdb->posts
+        //WHERE post_type = '" . U3A_CONTACT_CPT . "' AND post_status = 'publish'");
         // use sanitize_title'd values in comparison
         $validation_msg .= u3a_check_csv_column($sourceFilename, $events_csv, 'Organiser', $contacts, false, true);
     }
@@ -504,7 +543,8 @@ function u3a_check_contacts_csv_file($sourcefile, $sourceFilename)
     $valid_cols = array('ID', 'Name', 'Membership no.', 'Given', 'Family', 'Phone', 'Phone 2', 'Email');
     foreach ($headers as $col) {
         if (!in_array($col, $valid_cols)) {
-            $validation_msg .= '<p> ' . $sourceFilename . " - The column heading '" . sanitize_text_field($col) . "' is not valid</p>";
+            $validation_msg .= '<p> ' . $sourceFilename . " - The column heading '" .
+             sanitize_text_field($col) . "' is not valid</p>";
         }
     }
 
@@ -520,7 +560,8 @@ function u3a_check_contacts_csv_file($sourcefile, $sourceFilename)
         foreach ($column as $entry) {
             ++$row;
             if (!empty($entry) && !is_numeric($entry)) {
-                $validation_msg .= '<p> ' . $sourceFilename . " - Row $row '" . sanitize_text_field($entry) . "' is not a valid ID</p>";
+                $validation_msg .= '<p> ' . $sourceFilename . " - Row $row '" .
+                 sanitize_text_field($entry) . "' is not a valid ID</p>";
             }
         }
     }
@@ -551,7 +592,8 @@ function u3a_check_contacts_csv_file($sourcefile, $sourceFilename)
         foreach ($column as $entry) {
             ++$row;
             if (!empty($entry) && !filter_var($entry, FILTER_VALIDATE_EMAIL)) {
-                $validation_msg .= '<p> ' . $sourceFilename . " - Row $row '" . sanitize_text_field($entry) . "' is not a valid email address in column Email</p>";
+                $validation_msg .= '<p> ' . $sourceFilename . " - Row $row '" . sanitize_text_field($entry) .
+                 "' is not a valid email address in column Email</p>";
             }
         }
     }
@@ -584,20 +626,24 @@ function u3a_check_venues_csv_file($sourcefile, $sourceFilename)
     }
 
     // check each header field is valid
-    $valid_cols = array('ID', 'Name', 'District', 'Address Line 1', 'Address Line 2', 'Town', 'Postcode', 'Accessibility', 'Phone', 'URL');
+    $valid_cols = array('ID', 'Name', 'District', 'Address Line 1', 'Address Line 2', 'Town',
+     'Postcode', 'Accessibility', 'Phone', 'URL');
     foreach ($headers as $col) {
         if (!in_array($col, $valid_cols)) {
-            $validation_msg .= '<p> ' . $sourceFilename . " - The column heading '" . sanitize_text_field($col) . "' is not valid</p>";
+            $validation_msg .= '<p> ' . $sourceFilename . " - The column heading '" .
+             sanitize_text_field($col) . "' is not valid</p>";
         }
         if (in_array($col, $not_in_use)) {
-            $validation_msg .= '<p> ' . $sourceFilename . " - Before trying to import a file with the '$col' column the option setting to show the corresponding field must be set.</p>";
+            $validation_msg .= '<p> ' . $sourceFilename .
+             " - Before trying to import a file with the '$col' column the option
+              setting to show the corresponding field must be set.</p>";
         }
     }
 
     // Set transient flag if ID field is present
     if (in_array('ID', $headers)) {
         set_transient('CSV_has_ID', 'yes', 10 * MINUTE_IN_SECONDS);
-    }    
+    }
 
     // The 'Name' column is required.  Other columns are all optional.
     if (!in_array('Name', $headers)) {
@@ -623,12 +669,14 @@ function u3a_check_venues_csv_file($sourcefile, $sourceFilename)
         foreach ($column as $entry) {
             ++$row;
             if (!empty($entry) && !is_numeric($entry)) {
-                $validation_msg .= '<p> ' . $sourceFilename . " - Row $row '" . sanitize_text_field($entry) . "' is not a valid ID</p>";
+                $validation_msg .= '<p> ' . $sourceFilename . " - Row $row '" .
+                 sanitize_text_field($entry) . "' is not a valid ID</p>";
             }
         }
     }
 
-    // Can't really validate Address fields, Phone or Accessibility as all can hold mixed text without problem and all are optional.
+    // Can't really validate Address fields, Phone or Accessibility as all
+    // can hold mixed text without problem and all are optional.
 
     // Check that URL column contains either valid URL or is empty
     if (in_array('URL', $headers)) {
@@ -637,7 +685,8 @@ function u3a_check_venues_csv_file($sourcefile, $sourceFilename)
         foreach ($column as $entry) {
             ++$row;
             if (!empty($entry) && !filter_var($entry, FILTER_VALIDATE_URL)) {
-                $validation_msg .= '<p> ' . $sourceFilename . " - Row $row '" . sanitize_text_field($entry) . "' is not a valid URL</p>";
+                $validation_msg .= '<p> ' . $sourceFilename . " - Row $row '" .
+                 sanitize_text_field($entry) . "' is not a valid URL</p>";
             }
         }
     }
@@ -659,8 +708,14 @@ function u3a_check_venues_csv_file($sourcefile, $sourceFilename)
  * @param boolean $sanitize if true do comparison on sanitized values
  * @return string empty string if no errors found, or HTML text of all detected errors in p tags
  */
-function u3a_check_csv_column($sourceFilename, &$csvdata, $heading, $valid_entries, $required = false, $sanitize = false)
-{
+function u3a_check_csv_column(
+    $sourceFilename,
+    &$csvdata,
+    $heading,
+    $valid_entries,
+    $required = false,
+    $sanitize = false
+) {
     $html = '';
     if ($sanitize) {
         $valid_entries = array_map('sanitize_title', $valid_entries);
@@ -671,7 +726,8 @@ function u3a_check_csv_column($sourceFilename, &$csvdata, $heading, $valid_entri
         ++$row;
         $test_value = ($sanitize) ? sanitize_title($entry) : $entry;
         if (!empty($entry) && !in_array($test_value, $valid_entries)) {
-            $html .= '<p> ' . $sourceFilename . " - Row $row '" . sanitize_text_field($entry) . "' is not a valid $heading</p>";
+            $html .= '<p> ' . $sourceFilename . " - Row $row '" . sanitize_text_field($entry) .
+             "' is not a valid $heading</p>";
         } elseif (empty($entry) && $required) {
             $html .= '<p> ' . $sourceFilename . " - Row $row missing required entry for $heading</p>";
         }
@@ -692,8 +748,14 @@ function u3a_check_csv_column($sourceFilename, &$csvdata, $heading, $valid_entri
  * @param boolean $sanitize if true do comparison on sanitized values
  * @return string empty string if no errors found, or HTML text of all detected errors in p tags
  */
-function u3a_check_csv_column_array($sourceFilename, &$csvdata, $heading, $valid_entries, $required = false, $sanitize = false)
-{
+function u3a_check_csv_column_array(
+    $sourceFilename,
+    &$csvdata,
+    $heading,
+    $valid_entries,
+    $required = false,
+    $sanitize = false
+) {
     $html = '';
     if ($sanitize) {
         $valid_entries = array_map('sanitize_title', $valid_entries);
@@ -709,7 +771,8 @@ function u3a_check_csv_column_array($sourceFilename, &$csvdata, $heading, $valid
             $entry_values = array_map('trim', $entry_values);
             foreach ($entry_values as $entry_value) {
                 if (!in_array($entry_value, $valid_entries)) {
-                    $html .= '<p> ' . $sourceFilename . " - Row $row '" . sanitize_text_field($entry) . "' contains an invalid $heading</p>";
+                    $html .= '<p> ' . $sourceFilename . " - Row $row '" . sanitize_text_field($entry) .
+                     "' contains an invalid $heading</p>";
                     break;
                 }
             }
@@ -725,7 +788,7 @@ function u3a_check_csv_column_array($sourceFilename, &$csvdata, $heading, $valid
  *
  * @param array $rows - read from CSV file
  * @param string $sourceFilename is the basename of the uploaded file
- * @return HTML for any errors encountered or null string
+ * @return string  HTML for any errors encountered or null string
  */
 
 function u3a_check_rows_for_length(&$rows, $sourceFilename)
@@ -735,7 +798,8 @@ function u3a_check_rows_for_length(&$rows, $sourceFilename)
     $size        = count($rows);
     for ($c = 1; $c < $size; $c++) {
         if (count($rows[$c]) !== $headercount) {
-            $html .= '<p>' . $sourceFilename . " - Row $c missing data.  Expected $headercount entries but found " . count($rows[$c]) . '</p>';
+            $html .= '<p>' . $sourceFilename . " - Row $c missing data.  Expected $headercount entries but found " .
+             count($rows[$c]) . '</p>';
         }
     }
     return $html;

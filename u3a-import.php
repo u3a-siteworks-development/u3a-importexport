@@ -217,7 +217,8 @@ function u3a_csv_import_groups()
         if (isset($group['Email2'])) {
             update_post_meta($postid, 'email2', sanitize_email($group['Email2']));
         }
-        // 'Status' can be long form or short form.  Has been validated to use one or the other range of terms, but being defensive here.
+        // 'Status' can be long form or short form.
+        // Has been validated to use one or the other range of terms, but being defensive here.
         if (isset($group['Status'])) {
             if (in_array($group['Status'], $status_list)) {
                 update_post_meta($postid, 'status_NUM', array_search($group['Status'], $status_list));
@@ -365,7 +366,8 @@ function u3a_csv_import_events($force_new_events = false)
  * Find post by either ID or title.
  * If ID provided, check there is a post with this ID.  If not, treat as no ID.
  * If ID provided, retrieve post and check the title.  If title doesn't match, update the title and return the ID.
- * If no ID, try and match an existing post by title.  Success?  Return the ID.  Fail? Create new post with this title and default content and return ID.
+ * If no ID, try and match an existing post by title.  Success?  Return the ID.  Fail?
+ * Create new post with this title and default content and return ID.
  *
  * @param int $id Either ID of existing post or empty
  * @param string $title Post title
@@ -412,7 +414,8 @@ function u3a_find_or_create_post($id, $title, $type, $force_new = false)
             $content = '<!-- wp:u3a/eventdata /--> <!-- wp:paragraph --> <p></p> <!-- /wp:paragraph -->';
         }
         if ($type === U3A_GROUP_CPT) {
-            $content = '<!-- wp:u3a/groupdata /--> <!-- wp:paragraph --> <p></p> <!-- /wp:paragraph --> <!-- wp:u3a/eventlist /-->';
+            $content = '<!-- wp:u3a/groupdata /--> <!-- wp:paragraph --> <p></p> <!-- /wp:paragraph -->
+             <!-- wp:u3a/eventlist /-->';
         }
         $postid = wp_insert_post(
             array(
@@ -444,7 +447,8 @@ function u3a_id_by_match_title($title, $type)
 {
     global $wpdb;
     $san_title = sanitize_title($title);
-    $rows      = $wpdb->get_results($wpdb->prepare("SELECT ID, post_title FROM $wpdb->posts WHERE post_type = %s AND post_status = 'publish'", $type));
+    $rows      = $wpdb->get_results($wpdb->prepare("SELECT ID, post_title FROM $wpdb->posts WHERE post_type = %s
+     AND post_status = 'publish'", $type));
     foreach ($rows as $post) {
         if ($san_title === sanitize_title($post->post_title)) {
             return $post->ID;
