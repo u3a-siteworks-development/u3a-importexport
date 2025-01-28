@@ -15,21 +15,27 @@ define('U3A_IMPORT_URL', content_url() . '/uploads/importdata');
 
 // Definitions copied from core to avoid PHPCS errors
 
-if (!defined('U3A_GROUP_CPT')) {
-    define('U3A_GROUP_CPT', 'u3a_group');
-}
-if (!defined('U3A_GROUP_TAXONOMY')) {
-    define('U3A_GROUP_TAXONOMY', 'u3a_group_category');
-}
-if (!defined('U3A_EVENT_CPT')) {
-    define('U3A_EVENT_CPT', 'u3a_event');
-}
-if (!defined('U3A_EVENT_TAXONOMY')) {
-    define('U3A_EVENT_TAXONOMY', 'u3a_event_category');
-}
-if (!defined('U3A_VENUE_CPT')) {
-    define('U3A_VENUE_CPT', 'u3a_venue');
-}
-if (!defined('U3A_CONTACT_CPT')) {
-    define('U3A_CONTACT_CPT', 'u3a_contact');
+
+add_action('init', 'dummy_vars_init');
+
+function dummy_vars_init()
+{
+    if (!defined('U3A_GROUP_CPT')) {
+        define('U3A_GROUP_CPT', 'u3a_group');
+    }
+    if (!defined('U3A_GROUP_TAXONOMY')) {
+        define('U3A_GROUP_TAXONOMY', 'u3a_group_category');
+    }
+    if (!defined('U3A_EVENT_CPT')) {
+        define('U3A_EVENT_CPT', 'u3a_event');
+    }
+    if (!defined('U3A_EVENT_TAXONOMY')) {
+        define('U3A_EVENT_TAXONOMY', 'u3a_event_category');
+    }
+    if (!defined('U3A_VENUE_CPT')) {
+        define('U3A_VENUE_CPT', 'u3a_venue');
+    }
+    if (!defined('U3A_CONTACT_CPT')) {
+        define('U3A_CONTACT_CPT', 'u3a_contact');
+    }
 }
