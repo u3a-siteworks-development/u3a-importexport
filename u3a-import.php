@@ -142,7 +142,7 @@ function u3a_csv_import_groups()
         )
     );
     foreach ($terms as $term) {
-        $group_categories[$term->slug] = $term->name;
+        $group_categories[$term->slug] = html_entity_decode($term->name);
     }
 
     // run for each row, edit or create post as appropriate
