@@ -270,7 +270,7 @@ function u3a_csv_export_events()
         $name  = html_entity_decode($evt->post_title);
         $terms = get_the_terms($evt->ID, U3A_EVENT_TAXONOMY);
         if ((false !== $terms) && !is_wp_error($terms)) {
-            $cat = $terms[0]->name;
+            $cat = html_entity_decode($terms[0]->name);
         } else {
             // Shouldn't happen, but output an empty value
             $cat = '';
