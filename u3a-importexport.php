@@ -2,13 +2,13 @@
 /** 
 Plugin Name: u3a SiteWorks Import Export
 Description: Provides facility to import and export CSV data files
-Version: 1.6.3
+Version: 1.7.0
 Author: u3a SiteWorks team
 Author URI: https://siteworks.u3a.org.uk/
 Plugin URI: https://siteworks.u3a.org.uk/
 License: GPLv2
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
-Requires Plugins: u3a-siteworks-core
+Requires Plugins: u3a-siteworks-core, u3a-siteworks-configuration
 
 */
 
@@ -16,7 +16,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('U3A_IMPORTEXPORT_VERSION', '1.6.3');
+define('U3A_IMPORTEXPORT_VERSION', '1.7.0');
 
 if (!is_admin()) return; // Plugin only relevant on admin pages.
 
@@ -27,18 +27,24 @@ if (!is_plugin_active('u3a-siteworks-core/u3a-siteworks-core.php')) {
     return;
 }
 
-// Use the plugin update service on SiteWorks update server
 
-require 'inc/plugin-update-checker/plugin-update-checker.php';
+// Use the plugin update service provided in the Configuration plugin
 
-use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
-
-$u3aImpExpUpdateChecker = PucFactory::buildUpdateChecker(
-    'https://siteworks.u3a.org.uk/wp-update-server/?action=get_metadata&slug=u3a-importexport', //Metadata URL
-    __FILE__, //Full path to the main plugin file or functions.php.
-    'u3a-importexport'
+add_action(
+    'plugins_loaded',
+    function () {
+        if (function_exists('u3a_plugin_update_setup')) {
+            u3a_plugin_update_setup('u3a-importexport', __FILE__);
+        } else {
+            add_action(
+                'admin_notices',
+                function () {
+                    print '<div class="error"><p>SiteWorks Import-Export plugin unable to check for updates as the SiteWorks Configuration plugin is not active.</p></div>';
+                }
+            );
+        }
+    }
 );
-
 
 
 require 'inc/definitions.php';

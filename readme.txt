@@ -1,6 +1,6 @@
 === u3a-importexport ===
 Requires at least: 5.9
-Tested up to: 6.7
+Tested up to: 6.8
 Stable tag: 5.9
 Requires PHP: 7.3
 License: GPLv2 or later
@@ -20,6 +20,9 @@ For more information please refer to the [SiteWorks website](https://siteworks.u
 Please refer to the documentation on the [SiteWorks website](https://siteworks.u3a.org.uk/u3a-siteworks-training/)
 
 == Changelog ==
+= 1.7.0 =
+* Tested with WordPress 6.8
+* Code refactored to access plugin update service via configuration plugin
 = 1.6.3 =
 * Feature 1094 Change short text form of group status to "Waiting list"
 * Bug 1104 Fix fatal error if plugin.php is not loaded when plugin initialises.
