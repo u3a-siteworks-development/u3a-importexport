@@ -20,6 +20,7 @@ For more information please refer to the [SiteWorks website](https://siteworks.u
 Please refer to the documentation on the [SiteWorks website](https://siteworks.u3a.org.uk/u3a-siteworks-training/)
 
 == Changelog ==
+* Bug 1143: Import/Export plugin doesn't show groups with 'Unspecified' days when sorted.
 = 1.7.0 =
 * Tested with WordPress 6.8
 * Code refactored to access plugin update service via configuration plugin

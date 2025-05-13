@@ -108,7 +108,7 @@ function u3a_csv_import_groups()
     }
 
     $day_list          = array(
-        '' => '',
+        0  => '',
         1  => 'Monday',
         2  => 'Tuesday',
         3  => 'Wednesday',
