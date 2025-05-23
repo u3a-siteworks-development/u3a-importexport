@@ -16,7 +16,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('U3A_IMPORTEXPORT_VERSION', '1.7.0');
+define('U3A_IMPORTEXPORT_VERSION', '1.7.1');
 
 if (!is_admin()) return; // Plugin only relevant on admin pages.
 
