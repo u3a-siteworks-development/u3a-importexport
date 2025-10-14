@@ -274,10 +274,10 @@ function u3a_csv_export_events()
             $names = array_map('trim', wp_list_pluck($terms, "name"));
             $names = array_map('html_entity_decode', $names);
             $names = str_replace("|", "&#124;", $names);
-            $row[] = implode("|", $names);
+            $cat = implode("|", $names);
         } else {
             // Shouldn't happen, but output an empty value
-            $row[] = '';
+            $cat = '';
         }
         // Note: get_post_meta returns empty string if value not set.
         $date                = get_post_meta($evt->ID, 'eventDate', true);
