@@ -372,7 +372,7 @@ function u3a_check_events_csv_file($sourcefile, $sourceFilename)
     foreach ($terms as $term) {
         $categories[] = html_entity_decode($term->name);
     }
-    $validation_msg .= u3a_check_csv_column($sourceFilename, $events_csv, 'Category', $categories, true);
+    $validation_msg .= u3a_check_csv_column_array($sourceFilename, $events_csv, 'Category', $categories, true);
 
     // Check Date column for valid date format YYYY-MM-DD
     if (in_array('Date', $headers)) {

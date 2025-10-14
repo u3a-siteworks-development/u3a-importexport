@@ -268,12 +268,16 @@ function u3a_csv_export_events()
     foreach ($results as $evt) {
         $id    = $evt->ID;
         $name  = html_entity_decode($evt->post_title);
+        // Category
         $terms = get_the_terms($evt->ID, U3A_EVENT_TAXONOMY);
         if ((false !== $terms) && !is_wp_error($terms)) {
-            $cat = html_entity_decode($terms[0]->name);
+            $names = array_map('trim', wp_list_pluck($terms, "name"));
+            $names = array_map('html_entity_decode', $names);
+            $names = str_replace("|", "&#124;", $names);
+            $row[] = implode("|", $names);
         } else {
             // Shouldn't happen, but output an empty value
-            $cat = '';
+            $row[] = '';
         }
         // Note: get_post_meta returns empty string if value not set.
         $date                = get_post_meta($evt->ID, 'eventDate', true);

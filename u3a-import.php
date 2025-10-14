@@ -316,8 +316,14 @@ function u3a_csv_import_events($force_new_events = false)
         // Bug 605 must use slug (not name) to set the category
         if (isset($event['Category'])) {
             $term = array_search($event['Category'], $event_categories);
-            if ($term) {
-                wp_set_object_terms($postid, $term, U3A_EVENT_TAXONOMY);
+            $categories = explode("|", $event['Category']);
+            $categories = str_replace("&#124;", "|", $categories);
+            $categories = array_map('trim', $categories);
+            foreach ($categories as $category) {
+                $term = array_search($category, $event_categories);
+                if ($term) {
+                    wp_set_object_terms($postid, $term, U3A_EVENT_TAXONOMY, true);
+                }
             }
         }
 
