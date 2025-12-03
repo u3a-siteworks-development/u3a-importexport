@@ -1,6 +1,6 @@
 === u3a-importexport ===
 Requires at least: 5.9
-Tested up to: 6.8
+Tested up to: 6.9
 Stable tag: 5.9
 Requires PHP: 7.3
 License: GPLv2 or later
@@ -20,6 +20,8 @@ For more information please refer to the [SiteWorks website](https://siteworks.u
 Please refer to the documentation on the [SiteWorks website](https://siteworks.u3a.org.uk/u3a-siteworks-training/)
 
 == Changelog ==
+= 1.7.2 =
+* Feature 1156 Provide support for multiple event categories (introduced in core plugin 1.2.5)
 = 1.7.1 =
 * Bug 1143: Import/Export plugin doesn't show groups with 'Unspecified' days when sorted.
 = 1.7.0 =
