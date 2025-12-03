@@ -135,7 +135,7 @@ END;
     <p>To create an up to date set of export files, select the Export tab and click the button 'Generate new export files'.
     You can then download whichever set of data your require.</p>
     <h3>Importing information</h3>
-    <p><strong>It is highly recommended that you create a backup of your website before importing from your CSV files.</strong></p>
+    <p><strong>It is highly recommended that you ensure your website is backed up before importing from your CSV files.</strong></p>
     <p>If you will be creating your CSV import files using a spreadsheet application you may find it helpful to download a copy
     of the spreadsheet import template (available on the 'Export' tab).  This contains ready-made sheets you can use.  It also contains
     a reminder of the main requirements for what information is required in import files.</p>
