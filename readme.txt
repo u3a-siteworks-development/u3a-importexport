@@ -15,13 +15,19 @@ and events and related contact and venue information.
 
 For more information please refer to the [SiteWorks website](https://siteworks.u3a.org.uk/)
 
+Version 2.0.0 includes a change in the way event categories are handled.
+In version 1.x.x only a single category per event was supported.  Version 2 allows multiple event categories.
+Where multiple categories exist for an event the Category field is now a vertical bar separated string of all the categories.
+For example  "Outing|Social|West Region"
+
+
 == Frequently Asked Questions ==
 
 Please refer to the documentation on the [SiteWorks website](https://siteworks.u3a.org.uk/u3a-siteworks-training/)
 
 == Changelog ==
-= 1.7.2 =
-* Feature 1156 Provide support for multiple event categories (introduced in core plugin 1.2.5)
+= 2.0.0 =
+* Feature 1156 Provide support for multiple event categories (introduced in core plugin 2.0.0)
 = 1.7.1 =
 * Bug 1143: Import/Export plugin doesn't show groups with 'Unspecified' days when sorted.
 = 1.7.0 =
