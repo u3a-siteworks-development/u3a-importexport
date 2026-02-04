@@ -26,6 +26,8 @@ For example  "Outing|Social|West Region"
 Please refer to the documentation on the [SiteWorks website](https://siteworks.u3a.org.uk/u3a-siteworks-training/)
 
 == Changelog ==
+= 2.0.1 =
+* Bug 1163: CSV Import using ID field did fails to update existing records
 = 2.0.0 =
 * Feature 1156 Provide support for multiple event categories (introduced in core plugin 2.0.0)
 = 1.7.1 =
