@@ -391,7 +391,7 @@ function u3a_find_or_create_post($id, $title, $type, $force_new = false)
             $found = $wpdb->get_var(
                 $wpdb->prepare(
                     "SELECT COUNT(*) FROM $wpdb->posts WHERE ID = %s AND post_type=%s",
-                    array('$id', '$type')
+                    array($id, $type)
                 )
             );
             if ($found == 0) {
