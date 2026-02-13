@@ -13,6 +13,11 @@ function u3a_csv_import_contacts()
         return $error_msg;
     }
 
+    $error_msg = pre_validate_ids($contacts_csv, U3A_CONTACT_CPT);
+    if (!empty($error_msg)) {
+        return "<p>Contacts import failed: " . $error_msg . "</p>";
+    }
+
     // run for each row, edit or create post as appropriate
     foreach ($contacts_csv as $contact) {
         //find or create post
@@ -56,6 +61,12 @@ function u3a_csv_import_venues()
     if (!empty($error_msg)) {
         return $error_msg;
     }
+
+    $error_msg = pre_validate_ids($venues_csv, U3A_VENUE_CPT);
+    if (!empty($error_msg)) {
+        return "<p>Venues import failed: " . $error_msg . "</p>";
+    }
+
 
     // run for each row, edit or create post as appropriate
     foreach ($venues_csv as $venue) {
@@ -105,6 +116,11 @@ function u3a_csv_import_groups()
     list($error_msg, $headers, $groups_csv) = u3a_read_csv_file($sourcefile, 'groups file');
     if (!empty($error_msg)) {
         return $error_msg;
+    }
+
+    $error_msg = pre_validate_ids($groups_csv, U3A_GROUP_CPT);
+    if (!empty($error_msg)) {
+        return "<p>Groups import failed: " . $error_msg . "</p>";
     }
 
     $day_list          = array(
@@ -236,11 +252,15 @@ function u3a_csv_import_groups()
             $categories = explode("|", $group['Category']);
             $categories = str_replace("&#124;", "|", $categories);
             $categories = array_map('trim', $categories);
+            $newcategories = array();
             foreach ($categories as $category) {
                 $term = array_search($category, $group_categories);
                 if ($term) {
-                    wp_set_object_terms($postid, $term, U3A_GROUP_TAXONOMY, true);
+                    $newcategories[] = $term;
                 }
+            }
+            if (!empty($newcategories)) {
+                wp_set_object_terms($postid, $newcategories, U3A_GROUP_TAXONOMY, false);
             }
         }
     }
@@ -264,6 +284,12 @@ function u3a_csv_import_events($force_new_events = false)
     list($error_msg, $headers, $events_csv) = u3a_read_csv_file($sourcefile, 'events file');
     if (!empty($error_msg)) {
         return $error_msg;
+    }
+    if (!$force_new_events) {
+        $error_msg = pre_validate_ids($events_csv, U3A_EVENT_CPT);
+        if (!empty($error_msg)) {
+            return "<p>Events import failed: " . $error_msg . "</p>";
+        }
     }
 
     // Build lookup table of event category  Slug->Name
@@ -319,11 +345,15 @@ function u3a_csv_import_events($force_new_events = false)
             $categories = explode("|", $event['Category']);
             $categories = str_replace("&#124;", "|", $categories);
             $categories = array_map('trim', $categories);
+            $newcategories = array();
             foreach ($categories as $category) {
                 $term = array_search($category, $event_categories);
                 if ($term) {
-                    wp_set_object_terms($postid, $term, U3A_EVENT_TAXONOMY, true);
+                    $newcategories[] = $term;
                 }
+            }
+            if (!empty($newcategories)) {
+                wp_set_object_terms($postid, $newcategories, U3A_EVENT_TAXONOMY, false);
             }
         }
 
@@ -364,6 +394,61 @@ function u3a_csv_import_events($force_new_events = false)
     $done = count($events_csv);
     $html = "<p>Number of events processed: $done</p>\n";
     return $html;
+}
+
+/*
+ * FInd a post corresponding to a type and an ID.
+ */
+function u3a_find_post($id, $type)
+{
+    global $wpdb;
+
+    $id = trim($id);
+    if (is_numeric($id)) {
+        $found = $wpdb->get_var(
+            $wpdb->prepare(
+                "SELECT COUNT(*) FROM $wpdb->posts WHERE ID = %s AND post_type=%s",
+                array($id, $type)
+            )
+        );
+        if ($found == 0) {
+            return false;
+        }
+    }
+    return true;
+}
+
+/*
+ * Check all the lines which have an ID, to make sure that the ID exists in the
+ * database already.
+ *
+ *
+ */
+
+function pre_validate_ids($incoming_csv, $csvtype)
+{
+    $badids = array();
+    foreach ($incoming_csv as $item) {
+        if (isset($item['ID'])) {
+            // we need to check if this item already exists and fail the whole import if not
+            $found = u3a_find_post($item['ID'], $csvtype);
+            if (!$found) {
+                $badids[] = $item['ID'];
+            }
+        }
+    }
+    if (!empty($badids)) {
+        if (count($badids) > 5) {
+            $num = count($badids);
+            return "$num IDs found with no corresponding post - E.g {$badids[0]}, {$badids[1]},
+            {$badids[2]}, {$badids[3]}, {$badids[4]}..";
+        } else {
+            $idlist = implode(',', $badids);
+            return "At least one ID found with no corresponding post ($idlist)";
+        }
+    }
+
+    return '';
 }
 
 
