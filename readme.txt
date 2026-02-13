@@ -2,7 +2,7 @@
 Requires at least: 5.9
 Tested up to: 6.9
 Stable tag: 5.9
-Requires PHP: 7.3
+Requires PHP: 8.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -26,9 +26,11 @@ For example  "Outing|Social|West Region"
 Please refer to the documentation on the [SiteWorks website](https://siteworks.u3a.org.uk/u3a-siteworks-training/)
 
 == Changelog ==
-= 2.0.1 =
+= 2.0.2 =
+* Bug 1171: importing groups or events with changed categories fails to delete original categories
+= 2.0.1 (not released) =
 * Bug 1163: CSV Import using ID field did fails to update existing records
-= 2.0.0 =
+= 2.0.0 (not released) =
 * Feature 1156 Provide support for multiple event categories (introduced in core plugin 2.0.0)
 = 1.7.1 =
 * Bug 1143: Import/Export plugin doesn't show groups with 'Unspecified' days when sorted.

@@ -2,7 +2,7 @@
 /** 
 Plugin Name: u3a SiteWorks Import Export
 Description: Provides facility to import and export CSV data files
-Version: 2.0.1
+Version: 2.0.2
 Author: u3a SiteWorks team
 Author URI: https://siteworks.u3a.org.uk/
 Plugin URI: https://siteworks.u3a.org.uk/
@@ -16,7 +16,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('U3A_IMPORTEXPORT_VERSION', '2.0.1');
+define('U3A_IMPORTEXPORT_VERSION', '2.0.2');
 
 if (!is_admin()) return; // Plugin only relevant on admin pages.
 
