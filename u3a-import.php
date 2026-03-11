@@ -292,6 +292,10 @@ function u3a_csv_import_events($force_new_events = false)
         }
     }
 
+    // Transient is used by core to prevent calendar ics file generation while
+    // events are being imported and created.
+    set_transient('u3a_events_importing', 'true', 30 * 60);
+
     // Build lookup table of event category  Slug->Name
     // This is important as we need the slug (not the name) to set the event category
     $event_categories = array();
@@ -392,6 +396,7 @@ function u3a_csv_import_events($force_new_events = false)
         }
     }
     $done = count($events_csv);
+    delete_transient('u3a_events_importing');
     $html = "<p>Number of events processed: $done</p>\n";
     return $html;
 }
