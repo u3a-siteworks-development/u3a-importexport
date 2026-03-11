@@ -1,6 +1,6 @@
 === u3a-importexport ===
 Requires at least: 5.9
-Tested up to: 6.9
+Tested up to: 7.0
 Stable tag: 5.9
 Requires PHP: 8.2
 License: GPLv2 or later
@@ -26,6 +26,8 @@ For example  "Outing|Social|West Region"
 Please refer to the documentation on the [SiteWorks website](https://siteworks.u3a.org.uk/u3a-siteworks-training/)
 
 == Changelog ==
+= 2.0.3 =
+* Feature 1173. Set transient 'u3a_events_importing' while importing which prevents Core plugin trying to update iCalendar while event import is in progress
 = 2.0.2 =
 * Bug 1171: importing groups or events with changed categories fails to delete original categories
 = 2.0.1 (not released) =
