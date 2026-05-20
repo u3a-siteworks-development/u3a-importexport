@@ -231,7 +231,7 @@ function u3a_check_groups_csv_file($sourcefile, $sourceFilename)
 
     // Check Frequency column for valid entries if present.  Empty entries allowed.
     if (in_array('Frequency', $headers)) {
-        $validation_msg .= u3a_check_csv_column($sourceFilename, $groups_csv, 'Frequency', array('Weekly', 'Fortnightly', 'Monthly'));
+        $validation_msg .= u3a_check_csv_column($sourceFilename, $groups_csv, 'Frequency', array('Weekly', 'Fortnightly', 'Monthly', 'Twice-monthly'));
     }
 
     // Check that an ID column only has integers or is empty

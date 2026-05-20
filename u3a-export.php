@@ -288,7 +288,7 @@ function u3a_csv_export_events()
         list($venid, $venue) = id_and_title_of_metafield($evt, 'eventVenue_ID');
         list($orgid, $org)   = id_and_title_of_metafield($evt, 'eventOrganiser_ID');
         $cost                = get_post_meta($evt->ID, 'eventCost', true);
-        $booking             = get_post_meta($evt->ID, 'eventBookingRequired', true) === 1 ? 'Yes' : 'No';
+        $booking             = get_post_meta($evt->ID, 'eventBookingRequired', true) === '1' ? 'Yes' : 'No';
 
         $event = array($id, $name, $cat, $date, $time, $endtime, $days, $grpid, $group, $venid, $venue, $orgid, $org, $cost, $booking);
 
