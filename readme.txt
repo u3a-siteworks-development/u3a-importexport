@@ -26,6 +26,7 @@ For example  "Outing|Social|West Region"
 Please refer to the documentation on the [SiteWorks website](https://siteworks.u3a.org.uk/u3a-siteworks-training/)
 
 == Changelog ==
+* Bug 1188 Amend import template spreadsheet notes to include 'Twice-monthly'
 = 2.0.3 =
 * Feature 1176 Support for Group frequency list to include 'Twice-monthly'
 * Bug 1180 "Booking required" always exported as "No"
