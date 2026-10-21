@@ -1,6 +1,6 @@
 === u3a-importexport ===
 Requires at least: 5.9
-Tested up to: 7.0
+Tested up to: 7.1
 Stable tag: 5.9
 Requires PHP: 8.2
 License: GPLv2 or later
@@ -26,6 +26,7 @@ For example  "Outing|Social|West Region"
 Please refer to the documentation on the [SiteWorks website](https://siteworks.u3a.org.uk/u3a-siteworks-training/)
 
 == Changelog ==
+= 2.0.4 =
 * Bug 1188 Amend import template spreadsheet notes to include 'Twice-monthly'
 = 2.0.3 =
 * Feature 1176 Support for Group frequency list to include 'Twice-monthly'
